@@ -1,0 +1,67 @@
+#include <stdio.h>
+
+int getDayOfWeek(int year, int month, int day) {
+    if (month < 3) {
+        month += 12;
+        year -= 1;
+    }
+    int k = year % 100;
+    int j = year / 100;
+    int h = (day + (13 * (month + 1)) / 5 + k + k / 4 + j / 4 + 5 * j) % 7;
+    return h;
+}
+
+int getDaysInMonth(int year, int month) {
+    if (month == 2) {
+        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+            return 29; 
+        } else {
+            return 28;
+        }
+    } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+        return 30;
+    } else {
+        return 31;
+    }
+}
+
+void displayCalendar(int year, int month) {
+    char *months[] = {"", "January", "February", "March", "April", "May", "June",
+                       "July", "August", "September", "October", "November", "December"};
+    int daysInMonth = getDaysInMonth(year, month);
+    int dayOfWeek = getDayOfWeek(year, month, 1);
+
+    printf("\n==============================\n");
+    printf("       %s %d\n", months[month], year);
+    printf("==============================\n");
+    printf(" Sun Mon Tue Wed Thu Fri Sat\n");
+
+    for (int i = 0; i < dayOfWeek; i++) {
+        printf("    ");
+    }
+
+    for (int day = 1; day <= daysInMonth; day++) {
+        printf("%4d", day);
+        if ((day + dayOfWeek) % 7 == 0 || day == daysInMonth) {
+            printf("\n");
+        }
+    }
+}
+
+int main() {
+    int year, month;
+
+    printf("Enter year: ");
+    scanf("%d", &year);
+    printf("Enter month (1-12): ");
+    scanf("%d", &month);
+
+    if (month < 1 || month > 12) {
+        printf("Invalid month. Please enter a month between 1 and 12.\n");
+        return 1;
+    }
+
+    displayCalendar(year, month);
+
+    return 0;
+}
